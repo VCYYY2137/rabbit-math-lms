@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>兔然會了</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="login-screen" id="loginScreen">
+      <div class="login-visual">
+        <div class="login-brand">
+          <div class="brand-mark"><img src="assets/bunny-tutor.png" alt="" /></div>
+          <div>
+            <strong>兔然會了</strong>
+            <span>五、六年級數學練習基地</span>
+          </div>
+        </div>
+        <div class="login-copy">
+          <p class="eyebrow">進入前先熱身</p>
+          <h1>先暖身一下。</h1>
+          <p>進入前先做一題小判斷，讓腦袋進入數學模式。</p>
+        </div>
+        <div class="login-hero-art">
+          <img src="assets/bunny-tutor.png" alt="兔子學習管家" />
+          <div class="warmup-card">
+            <span>小暖身</span>
+            <b>哪一個比較大？</b>
+            <div class="warmup-question" aria-label="比較分數大小">
+              <span class="frac"><span>1</span><span>2</span></span>
+              <span class="compare-mark">或</span>
+              <span class="frac"><span>1</span><span>3</span></span>
+            </div>
+            <div class="warmup-options" aria-label="小暖身選項">
+              <button type="button" data-warmup="half"><span class="frac small-frac"><span>1</span><span>2</span></span></button>
+              <button type="button" data-warmup="third"><span class="frac small-frac"><span>1</span><span>3</span></span></button>
+            </div>
+            <p id="warmupFeedback">選一個答案試試看。</p>
+          </div>
+        </div>
+      </div>
+
+      <section class="login-panel">
+        <div class="auth-tabs" role="tablist" aria-label="登入與註冊">
+          <button class="auth-tab active" type="button" data-auth-tab="login">登入</button>
+          <button class="auth-tab" type="button" data-auth-tab="register">註冊</button>
+        </div>
+
+        <form class="auth-form active" id="loginForm">
+          <h2>學生登入</h2>
+          <label for="loginAccount">帳號</label>
+          <input id="loginAccount" autocomplete="username" placeholder="請輸入帳號" />
+          <label for="loginPassword">密碼</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="請輸入密碼" />
+          <p class="form-message" id="loginMessage" aria-live="polite"></p>
+          <button class="primary-action" type="submit">登入學習系統</button>
+        </form>
+
+        <form class="auth-form" id="registerForm">
+          <h2>註冊帳號</h2>
+          <p>帳號至少 5 碼，密碼至少 8 碼，兩者都要包含英文字母和數字。帳號和暱稱都不能和別人重複。</p>
+          <label for="registerAccount">帳號</label>
+          <input id="registerAccount" autocomplete="username" placeholder="至少 5 碼，例如 ming123" />
+          <label for="registerPassword">密碼</label>
+          <input id="registerPassword" autocomplete="new-password" placeholder="至少 8 碼，含英文和數字" />
+          <label for="registerPasswordConfirm">確認密碼</label>
+          <input id="registerPasswordConfirm" autocomplete="new-password" placeholder="再輸入一次密碼" />
+          <label for="registerNickname">使用者暱稱</label>
+          <input id="registerNickname" autocomplete="nickname" placeholder="中文或英文都可以，例如 小明 / Amy" />
+          <p class="form-message" id="registerMessage" aria-live="polite"></p>
+          <button class="primary-action" type="submit">完成註冊</button>
+        </form>
+      </section>
+    </section>
+
+    <div class="app-shell is-hidden" id="appShell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark"><img src="assets/bunny-tutor.png" alt="" /></div>
+          <div>
+            <strong>兔然會了</strong>
+            <span id="learnerLabel">五年級｜分數乘法</span>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="主要功能">
+          <button class="nav-item active" data-view="home"><span>⌂</span>學習首頁</button>
+          <button class="nav-item" data-view="coach"><span>✦</span>學習管家</button>
+          <button class="nav-item" data-view="course"><span>▦</span>課程</button>
+          <button class="nav-item" data-view="practice"><span>✎</span>練習</button>
+          <button class="nav-item" data-view="interaction"><span>◇</span>圖像操作</button>
+          <button class="nav-item" data-view="records"><span>▥</span>紀錄</button>
+          <button class="nav-item" data-view="data"><span>▤</span>資料</button>
+          <button class="nav-item" data-view="system"><span>⌘</span>系統</button>
+        </nav>
+
+        <div class="side-status">
+          <span>本週目標</span>
+          <strong>完成 5 次有效練習</strong>
+          <div class="mini-progress"><i style="width: 60%"></i></div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <strong id="welcomeText">小明，歡迎回來</strong>
+            <span>今天建議先完成 20 分鐘練習</span>
+          </div>
+          <div class="top-actions">
+            <div class="score-pill">★ 星星：<strong id="starCount">16</strong></div>
+            <button class="secondary-action small" id="logoutBtn">登出</button>
+          </div>
+        </header>
+
+        <section class="view active" id="home">
+          <div class="dashboard-head">
+            <div>
+              <p class="eyebrow">學習起點</p>
+              <h1>先選卡住的單元</h1>
+              <p>選一個單元，再說說目前遇到的狀況。</p>
+            </div>
+          </div>
+
+          <div class="diagnostic-layout">
+            <article class="diagnostic-chat panel">
+              <div class="chat-row coach-message">
+                <img src="assets/bunny-tutor.png" alt="" />
+                <p id="diagnosticPrompt">先選一個最近覺得比較卡的單元。</p>
+              </div>
+              <div id="diagnosticMessages" class="diagnostic-messages"></div>
+              <div class="quick-replies unit-replies" aria-label="五年級單元">
+                <button type="button" data-unit="fractionMultiply">分數的乘法</button>
+                <button type="button" data-unit="integerDivision">整數相除之分數表示</button>
+                <button type="button" data-unit="fractionDivideInteger">分數除以整數</button>
+              </div>
+              <div class="quick-replies difficulty-replies is-hidden" aria-label="常見困難">
+                <button type="button" data-difficulty="concept">看不懂題目意思</button>
+                <button type="button" data-difficulty="visual">圖和算式連不起來</button>
+                <button type="button" data-difficulty="calculation">計算常常出錯</button>
+                <button type="button" data-difficulty="confidence">看到分數就緊張</button>
+              </div>
+              <div id="diagnosticInputBlock" class="is-hidden">
+                <label class="input-label" for="diagnosticInput">也可以自己輸入</label>
+                <textarea id="diagnosticInput" rows="3" placeholder="例如：我知道要乘，可是不知道為什麼分母也要乘。"></textarea>
+                <button class="primary-action" id="sendDiagnosticBtn">送出想法</button>
+              </div>
+            </article>
+
+            <aside class="recommend-panel panel">
+              <h2>下一步</h2>
+              <div id="difficultyTag" class="difficulty-tag">等待你的回答</div>
+              <p id="recommendReason">先選一個單元，再選目前遇到的狀況。</p>
+              <div class="recommend-card">
+                <span>建議活動</span>
+                <strong id="recommendTitle">尚未產生</strong>
+                <p id="recommendDetail">完成選擇後會出現建議活動。</p>
+              </div>
+              <button class="primary-action" id="startRecommendationBtn" disabled>前往推薦內容</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="coach">
+          <div class="page-title">
+            <div>
+              <p class="eyebrow">學習管家</p>
+              <h1>聊聊目前的狀況</h1>
+              <p>把卡住的地方說出來，系統會保留紀錄，方便下次接著看。</p>
+            </div>
+          </div>
+
+          <div class="coach-layout">
+            <article class="chat-panel">
+              <div class="coach-empty" id="coachEmpty">
+                <img src="assets/bunny-tutor.png" alt="" />
+                <div>
+                  <h2>聊聊你的煩惱</h2>
+                  <p>不用講得很完整也沒關係。先說一點點，我們再慢慢拆。</p>
+                </div>
+              </div>
+              <div id="coachMessages" class="coach-messages" aria-live="polite"></div>
+              <div class="coach-suggestions" id="coachSuggestions">
+                <button type="button">我看到分數會有點怕</button>
+                <button type="button">我今天有點沒信心</button>
+                <button type="button">我看圖看不出答案</button>
+                <button type="button">我常常不知道自己錯在哪</button>
+              </div>
+              <div class="coach-input-row">
+                <textarea id="thoughtInput" rows="2" placeholder="把你現在卡住的地方打在這裡"></textarea>
+                <button class="primary-action" id="analyzeBtn">送出</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="course">
+          <div class="page-title">
+            <div>
+              <p class="eyebrow">課程</p>
+              <h1>分數單元</h1>
+            </div>
+            <div class="progress-chip">本單元 3 / 8</div>
+          </div>
+
+          <div class="lesson-list">
+            <article class="lesson-card">
+              <div class="lesson-visual green-visual"><span class="frac"><span>2</span><span>3</span></span> × <span class="frac"><span>1</span><span>4</span></span></div>
+              <div>
+                <span class="step">1</span>
+                <h2>分數乘法的意義</h2>
+                <p>用圖像理解「一部分的一部分」，讓公式自然長出來。</p>
+              </div>
+              <div class="lesson-progress"><span>60%</span><div><i style="width: 60%"></i></div></div>
+              <button class="primary-action small" data-view-link="interaction">開始操作</button>
+            </article>
+            <article class="lesson-card">
+              <div class="lesson-visual blue-visual">6 ÷ 4 = <span class="frac"><span>3</span><span>2</span></span></div>
+              <div>
+                <span class="step blue-step">2</span>
+                <h2>整數相除與分數表示</h2>
+                <p>把除法結果轉成分數，補上分子分母的語意。</p>
+              </div>
+              <div class="lesson-progress"><span>40%</span><div><i style="width: 40%"></i></div></div>
+              <button class="secondary-action small">排入明日</button>
+            </article>
+            <article class="lesson-card">
+              <div class="lesson-visual purple-visual"><span class="frac"><span>3</span><span>4</span></span> ÷ 2</div>
+              <div>
+                <span class="step purple-step">3</span>
+                <h2>分數除以整數</h2>
+                <p>從平均分配開始，避免只背顛倒相乘。</p>
+              </div>
+              <div class="lesson-progress"><span>0%</span><div><i style="width: 0%"></i></div></div>
+              <button class="secondary-action small">稍後學習</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="practice">
+          <div class="practice-head">
+            <div>
+              <p class="eyebrow">練習</p>
+              <h1>題目練習</h1>
+            </div>
+            <span id="practiceStatus">本次完成：0 / 3</span>
+          </div>
+
+          <div class="practice-layout">
+            <article class="problem-card">
+              <div class="problem-number" id="problemNumber">1</div>
+              <h2 id="problemText"><span class="frac"><span>2</span><span>3</span></span> × <span class="frac"><span>1</span><span>4</span></span> = ?</h2>
+              <div class="fraction-inputs">
+                <input id="numInput" inputmode="numeric" aria-label="分子" />
+                <span></span>
+                <input id="denInput" inputmode="numeric" aria-label="分母" />
+              </div>
+              <div class="confidence-row">
+                <label for="confidenceRange">把握度</label>
+                <input type="range" min="1" max="5" value="3" id="confidenceRange" />
+                <strong id="confidenceText">普通</strong>
+              </div>
+              <button class="primary-action" id="submitAnswer">送出答案</button>
+              <p class="feedback" id="feedbackText">先動手算，作答後會留下概念、計算和信心線索。</p>
+            </article>
+
+            <aside class="hint-stack">
+              <section>
+                <h2>提示</h2>
+                <p id="hintText">先想成「<span class="frac small-frac"><span>2</span><span>3</span></span> 的 <span class="frac small-frac"><span>1</span><span>4</span></span>」，用圖把 <span class="frac small-frac"><span>2</span><span>3</span></span> 再切成 4 份。</p>
+              </section>
+              <section>
+                <h2>筆記</h2>
+                <p>分子乘分子，分母乘分母。真正要懂的是：乘分數通常是在取一部分。</p>
+              </section>
+              <section class="warm">
+                <h2>本題檢查</h2>
+                <label><input type="checkbox" checked /> 我能用圖解釋</label>
+                <label><input type="checkbox" /> 我有檢查是否能約分</label>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="interaction">
+          <div class="page-title">
+            <div>
+              <p class="eyebrow">圖像操作</p>
+              <h1>分數面積模型</h1>
+            </div>
+            <div class="progress-chip">活動：分數面積模型</div>
+          </div>
+
+          <div class="dive-layout">
+            <article class="dive-board">
+              <div class="area-model" aria-label="分數面積模型">
+                <div class="cell fill-a"></div><div class="cell fill-a"></div><div class="cell"></div>
+                <div class="cell answer"></div><div class="cell"></div><div class="cell"></div>
+                <div class="cell answer"></div><div class="cell"></div><div class="cell"></div>
+                <div class="cell answer"></div><div class="cell"></div><div class="cell"></div>
+              </div>
+              <div class="formula-line"><span class="frac"><span>2</span><span>3</span></span> × <span class="frac"><span>1</span><span>4</span></span> = <strong><span class="frac"><span>1</span><span>6</span></span></strong></div>
+              <p>綠色先表示 <span class="frac small-frac"><span>2</span><span>3</span></span>，藍色切成 4 份後，重疊區就是答案。</p>
+            </article>
+            <aside class="control-panel">
+              <h2>活動設定</h2>
+              <label>切割份數 <input type="number" min="2" max="12" value="4" /></label>
+              <label>學習關卡 <select><option>圖像理解</option><option>符號轉換</option><option>混合練習</option></select></label>
+              <button class="primary-action">記錄這次操作</button>
+              <div class="api-note">已記錄：拖拉、切割、重試、停留時間。</div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="records">
+          <div class="page-title">
+            <div>
+              <p class="eyebrow">紀錄</p>
+              <h1>學習紀錄</h1>
+            </div>
+            <button class="secondary-action" id="resetRecords">清除本機紀錄</button>
+          </div>
+
+          <div class="record-grid">
+            <article class="record-card">
+              <h2>卡點分布</h2>
+              <div class="bar-row"><span>概念卡住</span><i style="width: 46%"></i><b>46%</b></div>
+              <div class="bar-row"><span>計算失誤</span><i style="width: 28%"></i><b>28%</b></div>
+              <div class="bar-row"><span>信心不足</span><i style="width: 26%"></i><b>26%</b></div>
+            </article>
+            <article class="record-card">
+              <h2>今日紀錄</h2>
+              <div id="recordList" class="record-list"></div>
+            </article>
+            <article class="record-card">
+              <h2>下一步排程</h2>
+              <ol>
+                <li>先做 1 題圖像題，確認分數乘法意義。</li>
+                <li>再做 2 題純計算，觀察是否仍需提示。</li>
+                <li>明天暖身題放入錯題相似題。</li>
+              </ol>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="data">
+          <div class="page-title">
+            <div>
+              <p class="eyebrow">資料</p>
+              <h1>資料管理</h1>
+            </div>
+            <button class="secondary-action" id="refreshDataBtn">重新整理</button>
+          </div>
+
+          <div class="data-layout">
+            <article class="record-card">
+              <h2>使用者資料</h2>
+              <div id="userDataList" class="data-list"></div>
+            </article>
+            <article class="record-card">
+              <h2>目前帳號的學習紀錄</h2>
+              <div id="learningDataList" class="data-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="system">
+          <div class="page-title">
+            <div>
+              <p class="eyebrow">系統</p>
+              <h1>系統架構</h1>
+            </div>
+          </div>
+
+          <div class="system-map">
+            <div class="map-node scene">學習情境<br /><span>PC / 平板 / 手機</span></div>
+            <div class="map-node core">兔然會了<br /><span>課程、題目、互動、測驗</span></div>
+            <div class="map-column">
+              <div class="map-node api">專題工具模組</div>
+              <div class="map-node api">Web 系統模組</div>
+              <div class="map-node api">學習輔助模組</div>
+              <div class="map-node api">其他系統模組</div>
+            </div>
+          </div>
+
+          <div class="rubric">
+            <article><b>基本操作</b><span>所有活動有呈現、有操作、有儲存。</span></article>
+            <article><b>學習控制</b><span>學習關卡、卡點、資源使用都有紀錄。</span></article>
+            <article><b>進階應用</b><span>整合伴讀情境與個人化路線，讓學習更自然。</span></article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
