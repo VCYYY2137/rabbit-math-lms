@@ -1452,27 +1452,30 @@ function videoUrlForUnit(unitKey) {
   return "https://www.youtube.com/watch?v=LUgDLJKaKuk";
 }
 
-function videoFileForUnit(unitKey) {
-  if (unitKey === "integerDivision") return "videos/integer-division.mp4";
-  if (unitKey === "fractionDivideInteger") return "videos/fraction-divide-integer.mp4";
-  return "videos/fraction-multiply.mp4";
-}
-
 function pickRelaxVideo() {
   return relaxVideos[Math.floor(Math.random() * relaxVideos.length)];
 }
 
-function openVideoLearning({ url, file = "", title = "影片學習", conceptKey = "fractionMultiply", note = "看完影片後，先做幾題練習，再進 10 題測驗。" }) {
+function youtubeEmbedUrl(url) {
+  const idMatch = url.match(/[?&]v=([^&]+)/) || url.match(/youtu\.be\/([^?&]+)/);
+  const id = idMatch ? idMatch[1] : "";
+  return id ? `https://www.youtube.com/embed/${id}` : url;
+}
+
+function openVideoLearning({ url, title = "影片學習", conceptKey = "fractionMultiply", note = "看完影片後，先做幾題練習，再進 10 題測驗。" }) {
   if (videoNudgeTimer) clearTimeout(videoNudgeTimer);
   currentVideoConceptKey = conceptKey;
   currentVideoUrl = url;
   videoLearningTitle.textContent = title;
   videoLearningNote.textContent = note;
   videoToPracticeBtn.textContent = title.includes("舒壓") ? "休息好了，選學習單元" : "看完了，開始練習";
-  learningVideoSource.src = file || videoFileForUnit(conceptKey);
-  learningVideo.load();
-  videoSourceLink.href = url || "#";
-  videoSourceLink.textContent = url || "原始影片連結";
+  learningVideoFrame.src = youtubeEmbedUrl(url);
+  videoBunnyQuestion.textContent = title.includes("舒壓")
+    ? "小兔提問：現在心情有比較鬆一點嗎？"
+    : "小兔提問：你剛剛看到的重點是什麼？";
+  videoConceptPrompt.textContent = title.includes("舒壓")
+    ? "可以再休息一下，也可以回來選單元。"
+    : "先用一句話想想，再進練習。看不懂也沒關係，練習會有提示。";
   showActiveLearningView("videoLearning");
 
   if (title.includes("舒壓")) {
@@ -2418,4 +2421,3 @@ renderRecords();
 if (learner) {
   enterApp(learner);
 }
-
