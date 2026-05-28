@@ -975,6 +975,9 @@ function leaveApp() {
 }
 
 function showView(id) {
+  if (id !== "videoLearning") {
+    stopVideoPlayback();
+  }
   views.forEach((view) => view.classList.toggle("active", view.id === id));
   navItems.forEach((item) => item.classList.toggle("active", item.dataset.view === id));
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -983,6 +986,9 @@ function showView(id) {
 function showChoiceView(id) {
   const view = document.getElementById(id);
   if (view) view.classList.add("choice-mode");
+  if (id === "quiz") {
+    quizStatus.classList.add("is-hidden");
+  }
   showView(id);
 }
 
@@ -1511,6 +1517,16 @@ function youtubeEmbedUrl(url) {
   return id ? `https://www.youtube.com/embed/${id}` : url;
 }
 
+function stopVideoPlayback() {
+  if (learningVideoFrame && learningVideoFrame.src) {
+    learningVideoFrame.src = "";
+  }
+  if (videoNudgeTimer) {
+    clearTimeout(videoNudgeTimer);
+    videoNudgeTimer = null;
+  }
+}
+
 function openVideoLearning({ url, title = "影片學習", conceptKey = "fractionMultiply", note = "看完影片後，先做幾題練習，再進 10 題測驗。" }) {
   if (videoNudgeTimer) clearTimeout(videoNudgeTimer);
   currentVideoConceptKey = conceptKey;
@@ -1585,6 +1601,7 @@ function renderQuizQuestion() {
   const question = quizQuestions[quizIndex];
   quizNumber.textContent = quizIndex + 1;
   quizStatus.textContent = `${quizIndex + 1}/${quizQuestions.length}`;
+  quizStatus.classList.remove("is-hidden");
   quizText.innerHTML = formatMath(cleanQuestionText(question.text), false);
   renderQuizVisual(question);
   quizNumInput.value = "";
@@ -2214,7 +2231,7 @@ videoToPracticeBtn.addEventListener("click", () => {
   startPractice(currentVideoConceptKey);
 });
 
-startQuizBtn.addEventListener("click", startQuiz);
+startQuizBtn.addEventListener("click", () => showChoiceView("videoLearning"));
 
 submitQuizAnswer.addEventListener("click", () => {
   const question = quizQuestions[quizIndex];
