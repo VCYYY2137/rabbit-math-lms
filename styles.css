@@ -2153,3 +2153,106 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+/* 手機版急救：避免按不到、版面爆掉 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  position: relative;
+  z-index: 10;
+  touch-action: manipulation;
+}
+
+iframe,
+video {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  .app,
+  .container,
+  .page,
+  .dashboard,
+  .main,
+  .content,
+  .layout {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+  }
+
+  .sidebar,
+  .left-panel,
+  .right-panel,
+  .ai-panel,
+  .decor,
+  .background-layer {
+    position: relative !important;
+    width: 100% !important;
+    z-index: 1 !important;
+  }
+
+  .card,
+  .panel,
+  .lesson-card,
+  .question-card,
+  .record-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 12px 0 !important;
+    padding: 18px !important;
+  }
+
+  h1 {
+    font-size: 24px !important;
+  }
+
+  h2 {
+    font-size: 20px !important;
+  }
+
+  p {
+    font-size: 15px !important;
+  }
+
+  button {
+    width: 100%;
+    min-height: 44px;
+    margin: 8px 0;
+    font-size: 16px;
+  }
+
+  input {
+    width: 100%;
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  iframe {
+    height: 220px !important;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 防止裝飾圖層蓋住按鈕 */
+  .overlay,
+  .bg,
+  .bg-shape,
+  .floating,
+  .mascot-bg {
+    pointer-events: none !important;
+  }
+}
