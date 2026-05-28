@@ -774,9 +774,9 @@ textarea {
   display: grid;
   align-content: start;
   gap: 10px;
-  flex: 0 0 142px;
-  height: 142px;
-  min-height: 142px;
+  flex: 1 1 auto;
+  min-height: 120px;
+  max-height: 230px;
   overflow: auto;
   margin: 8px 0 10px;
   padding-right: 4px;
@@ -841,6 +841,26 @@ textarea {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
+}
+
+#diagnosticInputBlock {
+  flex: 0 0 auto;
+  margin-top: auto;
+}
+
+#diagnosticInputBlock textarea {
+  min-height: 58px;
+  max-height: 86px;
+  resize: vertical;
+}
+
+.diagnostic-actions {
+  flex-wrap: nowrap;
+}
+
+.diagnostic-actions button {
+  min-height: 40px;
+  white-space: nowrap;
 }
 
 .recommend-panel {
@@ -2070,9 +2090,9 @@ textarea {
   }
 
   .diagnostic-messages {
-    flex-basis: 96px;
-    height: 96px;
-    min-height: 96px;
+    flex: 1 1 auto;
+    min-height: 86px;
+    max-height: 180px;
   }
 
   .dashboard-head p:not(.eyebrow) {
