@@ -2156,9 +2156,13 @@ videoToPracticeBtn.addEventListener("click", () => {
   startPractice(currentVideoConceptKey);
 });
 
-openVideoExternalBtn.addEventListener("click", () => {
-  if (currentVideoUrl) window.open(currentVideoUrl, "_blank", "noopener");
-});
+const openVideoExternalBtn = document.getElementById("openVideoExternalBtn");
+
+if (openVideoExternalBtn) {
+  openVideoExternalBtn.addEventListener("click", () => {
+    window.open(currentLesson.videoUrl);
+  });
+}
 
 startQuizBtn.addEventListener("click", startQuiz);
 
