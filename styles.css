@@ -2262,3 +2262,40 @@ video {
     pointer-events: none !important;
   }
 }
+/* ===== 強制修復按鈕無法點擊 ===== */
+
+button,
+a,
+input,
+select,
+textarea,
+.auth-card,
+.login-panel,
+.register-panel {
+  position: relative !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+}
+
+/* 所有背景裝飾禁止吃滑鼠 */
+.login-visual::before,
+.login-visual::after,
+.hero-bg,
+.overlay,
+.background,
+.bg-shape,
+.floating,
+.decor,
+.decoration,
+.mascot-bg {
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* 避免整頁被 absolute 蓋住 */
+.login-visual,
+.auth-layout,
+.hero-section {
+  position: relative !important;
+  z-index: 1 !important;
+}
