@@ -65,7 +65,8 @@ button {
   align-content: space-between;
   min-height: 620px;
   padding: 30px 34px 28px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background:
     linear-gradient(180deg, rgba(255, 253, 244, 0.86), rgba(237, 248, 229, 0.78)),
     #fff;

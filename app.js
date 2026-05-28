@@ -70,6 +70,7 @@ const practiceResponseTitle = document.getElementById("practiceResponseTitle");
 const practiceResponseText = document.getElementById("practiceResponseText");
 const nextProblemBtn = document.getElementById("nextProblemBtn");
 const stayProblemBtn = document.getElementById("stayProblemBtn");
+const videoFileForUnit = {};
 
 const relaxVideos = [
   {
