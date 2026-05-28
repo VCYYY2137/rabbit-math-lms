@@ -2006,15 +2006,7 @@ function advanceConceptStep(message = "") {
 
 navItems.forEach((item) => {
   item.addEventListener("click", () => {
-    if (item.dataset.view === "videoLearning") {
-      openVideoLearning({
-        url: videoUrlForUnit(currentVideoConceptKey || "fractionMultiply"),
-        title: unitProfiles[currentVideoConceptKey]?.label || "分數乘法的意義",
-        conceptKey: currentVideoConceptKey || "fractionMultiply"
-      });
-      return;
-    }
-    if (["practice", "quiz"].includes(item.dataset.view)) {
+    if (["videoLearning", "practice", "quiz"].includes(item.dataset.view)) {
       showChoiceView(item.dataset.view);
       return;
     }
