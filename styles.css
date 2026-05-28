@@ -80,6 +80,9 @@ button {
   height: 260px;
   border-radius: 50% 50% 0 0;
   background: #dcefc8;
+
+  pointer-events: none;
+  z-index: 0;
 }
 
 .login-brand,
@@ -1904,6 +1907,7 @@ textarea {
   .login-visual {
     min-height: auto;
     gap: 28px;
+    z-index: 1;
   }
 
   .sidebar {
@@ -2014,6 +2018,8 @@ textarea {
   .login-visual,
   .login-panel {
     padding: 20px;
+    position: relative;
+    z-index: 10;
   }
 
   .login-hero-art {
