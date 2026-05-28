@@ -46,13 +46,12 @@ const diagnosticInputBlock = document.getElementById("diagnosticInputBlock");
 const conceptStage = document.getElementById("conceptStage");
 const conceptBunnyText = document.getElementById("conceptBunnyText");
 const conceptProgress = document.getElementById("conceptProgress");
-const learningVideo = document.getElementById("learningVideo");
-const learningVideoSource = document.getElementById("learningVideoSource");
+const learningVideoFrame = document.getElementById("learningVideoFrame");
 const videoLearningTitle = document.getElementById("videoLearningTitle");
 const videoLearningNote = document.getElementById("videoLearningNote");
 const videoToPracticeBtn = document.getElementById("videoToPracticeBtn");
-const openVideoExternalBtn = document.getElementById("openVideoExternalBtn");
-const videoSourceLink = document.getElementById("videoSourceLink");
+const videoBunnyQuestion = document.getElementById("videoBunnyQuestion");
+const videoConceptPrompt = document.getElementById("videoConceptPrompt");
 const startQuizBtn = document.getElementById("startQuizBtn");
 const quizStatus = document.getElementById("quizStatus");
 const quizNumber = document.getElementById("quizNumber");
@@ -62,8 +61,10 @@ const quizNumInput = document.getElementById("quizNumInput");
 const quizDenInput = document.getElementById("quizDenInput");
 const quizFeedback = document.getElementById("quizFeedback");
 const submitQuizAnswer = document.getElementById("submitQuizAnswer");
+const nextQuizQuestionBtn = document.getElementById("nextQuizQuestionBtn");
 const quizComplete = document.getElementById("quizComplete");
 const quizCompleteText = document.getElementById("quizCompleteText");
+const quizReviewList = document.getElementById("quizReviewList");
 const practiceResponse = document.getElementById("practiceResponse");
 const practiceResponseTitle = document.getElementById("practiceResponseTitle");
 const practiceResponseText = document.getElementById("practiceResponseText");
@@ -73,17 +74,14 @@ const stayProblemBtn = document.getElementById("stayProblemBtn");
 const relaxVideos = [
   {
     title: "小影片舒壓：章魚",
-    file: "videos/章魚.mp4",
     url: "https://www.youtube.com/watch?v=S432yNJd9t4"
   },
   {
     title: "小影片舒壓：團結力量大",
-    file: "videos/團結力量大.mp4",
     url: "https://www.youtube.com/watch?v=uEnAWyWMFgw"
   },
   {
     title: "小影片舒壓：胖子",
-    file: "videos/胖子.mp4",
     url: "https://www.youtube.com/watch?v=3iZO2LS0l3Y"
   }
 ];
@@ -646,6 +644,56 @@ function makeIntegerOrFractionDivideInteger(num, den, divisor) {
   });
 }
 
+function makeFractionMultiplyProblem(aNum, aDen, bNum, bDen, concept = "分數乘法基本題") {
+  const answer = simplifyFraction(aNum * bNum, aDen * bDen);
+  return normalizeProblemAnswer({
+    text: `${aNum}/${aDen} × ${bNum}/${bDen} = ?`,
+    num: answer.num,
+    den: answer.den,
+    hint: `先看成 ${aNum}/${aDen} 的 ${bNum}/${bDen}，分子乘分子、分母乘分母後約分。`,
+    concept
+  });
+}
+
+function makeFractionTimesIntegerStory(num, den, times, item, unit, name = "媽媽") {
+  const answer = simplifyFraction(num * times, den);
+  return normalizeProblemAnswer({
+    text: `${name}做 1 ${unit}${item}需要 ${num}/${den} 份材料，做 ${times} ${unit}${item}需要多少份材料？`,
+    num: answer.num,
+    den: answer.den,
+    hint: `這題是 ${num}/${den} × ${times}，可以想成 ${times} 個 ${num}/${den} 相加。`,
+    concept: "分數X整數的應用"
+  });
+}
+
+function makeImproperMultiplyStory(aNum, aDen, bNum, bDen, item, unit, name = "小組") {
+  const answer = simplifyFraction(aNum * bNum, aDen * bDen);
+  return normalizeProblemAnswer({
+    text: `${name}有 ${aNum}/${aDen} ${unit}${item}，又準備了它的 ${bNum}/${bDen} 倍，一共相當於多少${unit}${item}？`,
+    num: answer.num,
+    den: answer.den,
+    hint: `假分數先不用改成帶分數，直接算 ${aNum}/${aDen} × ${bNum}/${bDen}，最後約分。`,
+    concept: "假分數x假分數的應用"
+  });
+}
+
+function makeFactorProductOrderProblem(baseName, bNum, bDen, cNum, cDen, ask = "最多") {
+  const values = [
+    { label: "甲", num: 1, den: 1 },
+    { label: "乙", num: bNum, den: bDen },
+    { label: "丙", num: cNum, den: cDen }
+  ].map((item) => ({ ...item, value: item.num / item.den }));
+  const picked = values.sort((a, b) => ask === "最多" ? b.value - a.value : a.value - b.value)[0];
+  const answer = simplifyFraction(picked.num, picked.den);
+  return normalizeProblemAnswer({
+    text: `甲${baseName}是 1，乙${baseName}是甲的 ${bNum}/${bDen} 倍，丙${baseName}是甲的 ${cNum}/${cDen} 倍。${ask}的量是甲的幾倍？`,
+    num: answer.num,
+    den: answer.den,
+    hint: `先比較被乘數 1、乘數 ${bNum}/${bDen}、積 ${cNum}/${cDen} 的大小，再選出${ask}的量。`,
+    concept: "被乘數、乘數和積排序"
+  });
+}
+
 problems.push(
   makeDivisionProblem(10, 4),
   makeDivisionProblem(14, 6),
@@ -715,6 +763,59 @@ problems.push(
   makeIntegerOrFractionDivideInteger(21, 28, 7),
   makeIntegerOrFractionDivideInteger(10, 15, 8),
   makeIntegerOrFractionDivideInteger(18, 24, 9)
+);
+
+problems.push(
+  makeFactorProductOrderProblem("瓶果汁", 3, 4, 7, 5, "最多"),
+  makeFactorProductOrderProblem("盒餅乾", 2, 3, 5, 4, "最多"),
+  makeFactorProductOrderProblem("條緞帶", 5, 6, 4, 3, "最少"),
+  makeFactorProductOrderProblem("盒彩筆", 7, 8, 9, 7, "最多"),
+  makeFactorProductOrderProblem("包糖果", 4, 5, 6, 5, "最少"),
+  makeFactorProductOrderProblem("杯果汁", 5, 4, 3, 2, "最多"),
+  makeFractionTimesIntegerStory(4, 3, 2, "面牆", "面", "媽媽粉刷"),
+  makeFractionTimesIntegerStory(5, 6, 3, "蛋糕", "個", "阿姨烤"),
+  makeFractionTimesIntegerStory(3, 5, 4, "緞帶", "條", "小美剪"),
+  makeFractionTimesIntegerStory(7, 8, 6, "果汁", "瓶", "班上準備"),
+  makeFractionTimesIntegerStory(5, 4, 5, "披薩", "個", "社團買"),
+  makeFractionTimesIntegerStory(2, 3, 7, "布料", "段", "老師裁"),
+  makeFractionTimesIntegerStory(9, 10, 8, "牛奶", "瓶", "餐廳用"),
+  makeFractionTimesIntegerStory(7, 6, 9, "糖水", "杯", "小隊調"),
+  makeImproperMultiplyStory(5, 3, 7, 4, "果醬", "瓶", "烘焙社"),
+  makeImproperMultiplyStory(7, 5, 8, 3, "麵粉", "公斤", "餐廳"),
+  makeImproperMultiplyStory(9, 4, 5, 2, "色紙", "張", "美術課"),
+  makeImproperMultiplyStory(11, 6, 13, 5, "蜂蜜", "罐", "小組"),
+  makeImproperMultiplyStory(8, 3, 7, 2, "緞帶", "公尺", "布置組"),
+  makeImproperMultiplyStory(13, 8, 9, 4, "果汁", "公升", "園遊會"),
+  makeFractionMultiplyProblem(2, 7, 5, 6, "真分數乘以真分數的計算"),
+  makeFractionMultiplyProblem(3, 8, 4, 9, "真分數乘以真分數的計算"),
+  makeFractionMultiplyProblem(5, 12, 6, 7, "分數乘法與約分"),
+  makeFractionMultiplyProblem(7, 10, 5, 14, "分數乘法與約分"),
+  makeFractionMultiplyProblem(9, 11, 4, 6, "分數乘法與約分"),
+  makeFractionMultiplyProblem(11, 12, 3, 5, "分數乘法基本題"),
+  makeFractionMultiplyProblem(13, 15, 6, 7, "分數乘法基本題"),
+  makeFractionMultiplyProblem(5, 9, 8, 15, "分數乘法與約分"),
+  makeFractionMultiplyProblem(4, 13, 7, 8, "真分數乘以真分數的計算"),
+  makeFractionMultiplyProblem(6, 11, 5, 9, "真分數乘以真分數的計算"),
+  makeFractionMultiplyProblem(7, 4, 9, 5, "假分數x假分數的計算"),
+  makeFractionMultiplyProblem(8, 3, 5, 2, "假分數x假分數的計算"),
+  makeFractionMultiplyProblem(10, 7, 14, 5, "假分數x假分數的計算"),
+  makeFractionMultiplyProblem(11, 6, 12, 5, "假分數x假分數的計算"),
+  makeFactorProductOrderProblem("盒彩色筆", 9, 10, 11, 8, "最多"),
+  makeFactorProductOrderProblem("桶油漆", 6, 7, 5, 6, "最少"),
+  makeFractionTimesIntegerStory(11, 12, 6, "海報", "張", "美術課做"),
+  makeImproperMultiplyStory(14, 9, 15, 7, "布料", "公尺", "服裝組"),
+  makeDivisionProblem(22, 16),
+  makeDivisionProblem(27, 18),
+  makeDivisionStory(20, 30, "飲料", "瓶"),
+  makeDivisionStory(24, 36, "繩子", "公尺"),
+  makeFractionDivisionLink(20, 31, 11),
+  makeEqualShareStory(18, 27, "糖果", "包", "童軍隊"),
+  makeUnitFractionDivide(15, 6),
+  makeFractionDivideInteger(13, 18, 5),
+  makeTrueFractionDivideStory(11, 16, 8, "果汁", "公升", "小芳"),
+  makeImproperFractionDivideStory(23, 7, 6, "蛋糕", "條", "烘焙社"),
+  makeGeneralFractionDivideStory(13, 15, 10, "緞帶", "公尺", "布置組"),
+  makeIntegerOrFractionDivideInteger(25, 30, 5)
 );
 
 problems.forEach(normalizeProblemAnswer);
@@ -1004,7 +1105,7 @@ function problemMatchesConcept(problem, conceptKey) {
   }
   return !/[÷除]/.test(problem.text)
     && !/除法|除以/.test(problem.concept)
-    && /分數乘法|乘法|約分|一部分|圖像/.test(problem.concept);
+    && /分數乘法|乘法|乘數|X|x|約分|一部分|圖像/.test(problem.concept);
 }
 
 function getProblemPool(conceptKey = currentVideoConceptKey) {
@@ -1390,7 +1491,8 @@ function questionCategory(problem) {
 }
 
 function buildQuizQuestions() {
-  const source = getProblemPool(currentVideoConceptKey);
+  const targetLength = currentVideoConceptKey === "mixed" ? 20 : 10;
+  const source = currentVideoConceptKey === "mixed" ? problems : getProblemPool(currentVideoConceptKey);
   const fallback = source.length ? source : problems;
   const groups = {
     "圖像理解": [],
@@ -1409,22 +1511,22 @@ function buildQuizQuestions() {
   ];
 
   const used = new Set(picked.map((problem) => problem.text));
-  while (picked.length < 10) {
+  while (picked.length < targetLength) {
     const candidates = shuffleItems(fallback).filter((problem) => !used.has(problem.text));
     if (!candidates.length) break;
     candidates.forEach((problem) => {
-      if (picked.length < 10) {
+      if (picked.length < targetLength) {
         picked.push(problem);
         used.add(problem.text);
       }
     });
   }
 
-  while (picked.length < 10 && fallback.length) {
+  while (picked.length < targetLength && fallback.length) {
     picked.push(shuffleItems(fallback)[0]);
   }
 
-  return shuffleItems(picked).slice(0, 10);
+  return shuffleItems(picked).slice(0, targetLength);
 }
 
 function renderQuizQuestion() {
@@ -1435,9 +1537,15 @@ function renderQuizQuestion() {
   renderQuizVisual(question);
   quizNumInput.value = "";
   quizDenInput.value = "";
-  quizFeedback.textContent = "先作答，完成 10 題後會整理需要加強的地方。";
+  quizFeedback.textContent = `先作答，完成 ${quizQuestions.length} 題後會整理需要加強的地方。`;
+  quizFeedback.classList.remove("correct", "wrong");
   quizComplete.classList.add("is-hidden");
+  if (quizReviewList) quizReviewList.innerHTML = "";
   submitQuizAnswer.disabled = false;
+  submitQuizAnswer.classList.remove("is-hidden");
+  nextQuizQuestionBtn.classList.add("is-hidden");
+  quizNumInput.disabled = false;
+  quizDenInput.disabled = false;
 }
 
 function renderQuizVisual(question) {
@@ -1468,6 +1576,23 @@ function startQuiz(conceptKey = currentVideoConceptKey) {
   renderQuizQuestion();
 }
 
+function explainQuizMistake(result) {
+  const q = result.question;
+  if (result.sameValue) {
+    return `你的答案和正確值相等，但測驗要求最簡分數，所以要約成 ${q.num}/${q.den}。`;
+  }
+  if (/整數相除|用分數表示|除法情境|連結分數和除法/.test(q.concept)) {
+    return `整數相除可以先寫成分數，被除數放分子、除數放分母，最後約成 ${q.num}/${q.den}。`;
+  }
+  if (/分數除以整數|單位分數|平均分/.test(q.concept)) {
+    return `分數除以整數可以想成把原本的分數平均分成幾份，算完要約成 ${q.num}/${q.den}。`;
+  }
+  if (/乘法|乘數|一部分|約分/.test(q.concept)) {
+    return `分數乘法先想成「一部分的一部分」，分子乘分子、分母乘分母，最後約成 ${q.num}/${q.den}。`;
+  }
+  return `這題正確答案是 ${q.num}/${q.den}，下次先把題意翻成算式，再檢查約分。`;
+}
+
 function finishQuiz() {
   const wrong = quizResults.filter((item) => !item.correct);
   const counts = wrong.reduce((acc, item) => {
@@ -1476,18 +1601,32 @@ function finishQuiz() {
   }, {});
   const weakest = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || "目前表現穩定";
   const correct = quizResults.length - wrong.length;
+  const total = quizResults.length;
   const advice = wrong.length
-    ? `10 題完成，答對 ${correct} 題。建議加強「${weakest}」，我會優先安排這類題目。`
-    : "10 題完成，全對。下一步可以挑戰應用題。";
+    ? `${total} 題完成，答對 ${correct} 題。建議加強「${weakest}」，我會優先安排這類題目。`
+    : `${total} 題完成，全對。下一步可以挑戰應用題。`;
 
   quizFeedback.textContent = "測驗完成。";
+  quizFeedback.classList.remove("correct", "wrong");
   quizCompleteText.textContent = advice;
+  quizReviewList.innerHTML = wrong.length
+    ? wrong.map((item, index) => `
+        <div class="quiz-review-item">
+          <strong>錯題 ${index + 1}</strong>
+          <span>${formatMath(cleanQuestionText(item.question.text))}</span>
+          <p>你的答案：${item.answerNum}/${item.answerDen}｜正確答案：${item.question.num}/${item.question.den}</p>
+          <p>${explainQuizMistake(item)}</p>
+        </div>
+      `).join("")
+    : '<div class="quiz-review-item">這次沒有錯題，狀態很穩。</div>';
   quizComplete.classList.remove("is-hidden");
   submitQuizAnswer.disabled = true;
+  submitQuizAnswer.classList.add("is-hidden");
+  nextQuizQuestionBtn.classList.add("is-hidden");
   records.push({
     result: "測驗完成",
-    problem: "10 題小測驗",
-    confidence: `答對 ${correct} / ${quizResults.length}`,
+    problem: `${total} 題小測驗`,
+    confidence: `答對 ${correct} / ${total}`,
     diagnosis: advice,
     concept: weakest,
     time: new Date().toLocaleString("zh-TW")
@@ -2024,27 +2163,46 @@ submitQuizAnswer.addEventListener("click", () => {
   const question = quizQuestions[quizIndex];
   if (!quizNumInput.value.trim() || !quizDenInput.value.trim()) return;
   submitQuizAnswer.disabled = true;
-  const isCorrect = isEquivalentFraction(quizNumInput.value.trim(), quizDenInput.value.trim(), question);
-  const sameValue = isSameFractionValue(quizNumInput.value.trim(), quizDenInput.value.trim(), question);
+  const answerNum = quizNumInput.value.trim();
+  const answerDen = quizDenInput.value.trim();
+  const isCorrect = isEquivalentFraction(answerNum, answerDen, question);
+  const sameValue = isSameFractionValue(answerNum, answerDen, question);
   quizResults.push({
     correct: isCorrect,
+    sameValue,
+    question,
+    answerNum,
+    answerDen,
     category: questionCategory(question),
     concept: question.concept
   });
 
   quizFeedback.textContent = isCorrect
-    ? "答對，下一題。"
+    ? "答對了。準備好再按下一題。"
     : sameValue
       ? `數值對了，但測驗要最簡分數。答案是 ${question.num}/${question.den}。`
-      : `這題先記下來，答案是 ${question.num}/${question.den}。`;
-  quizIndex += 1;
+      : `答錯了，正確答案是 ${question.num}/${question.den}。`;
+  quizFeedback.classList.toggle("correct", isCorrect);
+  quizFeedback.classList.toggle("wrong", !isCorrect);
+  quizNumInput.disabled = true;
+  quizDenInput.disabled = true;
 
   if (quizIndex >= quizQuestions.length) {
-    setTimeout(finishQuiz, 700);
+    finishQuiz();
     return;
   }
 
-  setTimeout(renderQuizQuestion, 700);
+  nextQuizQuestionBtn.textContent = quizIndex + 1 >= quizQuestions.length ? "看測驗回顧" : "下一題";
+  nextQuizQuestionBtn.classList.remove("is-hidden");
+});
+
+nextQuizQuestionBtn.addEventListener("click", () => {
+  quizIndex += 1;
+  if (quizIndex >= quizQuestions.length) {
+    finishQuiz();
+    return;
+  }
+  renderQuizQuestion();
 });
 
 authTabs.forEach((tab) => {

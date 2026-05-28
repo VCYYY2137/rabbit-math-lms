@@ -212,7 +212,7 @@
                 <p>用圖像理解「一部分的一部分」，讓公式自然長出來。</p>
               </div>
               <div class="lesson-actions">
-                <button class="secondary-action small" data-video-url="https://www.youtube.com/watch?v=LUgDLJKaKuk" data-video-file="videos/fraction-multiply.mp4" data-video-title="分數乘法的意義" data-video-concept="fractionMultiply">影片學習</button>
+                <button class="secondary-action small" data-video-url="https://www.youtube.com/watch?v=LUgDLJKaKuk" data-video-title="分數乘法的意義" data-video-concept="fractionMultiply">影片學習</button>
                 <button class="secondary-action small" data-practice-concept="fractionMultiply">開始練習</button>
                 <button class="primary-action small" data-quiz-concept="fractionMultiply">測驗</button>
               </div>
@@ -225,7 +225,7 @@
                 <p>把除法結果轉成分數，補上分子分母的語意。</p>
               </div>
               <div class="lesson-actions">
-                <button class="secondary-action small" data-video-url="https://www.youtube.com/watch?v=IlKS5dD2sYE&t=3s" data-video-file="videos/integer-division.mp4" data-video-title="整數相除與分數表示" data-video-concept="integerDivision">影片學習</button>
+                <button class="secondary-action small" data-video-url="https://www.youtube.com/watch?v=IlKS5dD2sYE&t=3s" data-video-title="整數相除與分數表示" data-video-concept="integerDivision">影片學習</button>
                 <button class="secondary-action small" data-practice-concept="integerDivision">開始練習</button>
                 <button class="primary-action small" data-quiz-concept="integerDivision">測驗</button>
               </div>
@@ -238,7 +238,7 @@
                 <p>從平均分配開始，避免只背顛倒相乘。</p>
               </div>
               <div class="lesson-actions">
-                <button class="secondary-action small" data-video-url="https://www.youtube.com/watch?v=fF3CA2drUek" data-video-file="videos/fraction-divide-integer.mp4" data-video-title="分數除以整數" data-video-concept="fractionDivideInteger">影片學習</button>
+                <button class="secondary-action small" data-video-url="https://www.youtube.com/watch?v=fF3CA2drUek" data-video-title="分數除以整數" data-video-concept="fractionDivideInteger">影片學習</button>
                 <button class="secondary-action small" data-practice-concept="fractionDivideInteger">開始練習</button>
                 <button class="primary-action small" data-quiz-concept="fractionDivideInteger">測驗</button>
               </div>
@@ -256,36 +256,49 @@
           </div>
 
           <div class="mode-selector">
-            <button type="button" data-video-url="https://www.youtube.com/watch?v=LUgDLJKaKuk" data-video-file="videos/fraction-multiply.mp4" data-video-title="分數乘法的意義" data-video-concept="fractionMultiply">
+            <button type="button" data-video-url="https://www.youtube.com/watch?v=LUgDLJKaKuk" data-video-title="分數乘法的意義" data-video-concept="fractionMultiply">
               <strong>分數的乘法</strong>
               <span>先看「一部分的一部分」。</span>
             </button>
-            <button type="button" data-video-url="https://www.youtube.com/watch?v=IlKS5dD2sYE&t=3s" data-video-file="videos/integer-division.mp4" data-video-title="整數相除與分數表示" data-video-concept="integerDivision">
+            <button type="button" data-video-url="https://www.youtube.com/watch?v=IlKS5dD2sYE&t=3s" data-video-title="整數相除與分數表示" data-video-concept="integerDivision">
               <strong>整數相除與分數表示</strong>
               <span>理解除法和分數的關係。</span>
             </button>
-            <button type="button" data-video-url="https://www.youtube.com/watch?v=fF3CA2drUek" data-video-file="videos/fraction-divide-integer.mp4" data-video-title="分數除以整數" data-video-concept="fractionDivideInteger">
+            <button type="button" data-video-url="https://www.youtube.com/watch?v=fF3CA2drUek" data-video-title="分數除以整數" data-video-concept="fractionDivideInteger">
               <strong>分數除以整數</strong>
               <span>用平均分配理解除法。</span>
             </button>
           </div>
 
           <div class="video-learning-layout">
-            <article class="video-panel">
-              <video id="learningVideo" class="local-video" controls preload="metadata">
-                <source id="learningVideoSource" src="" type="video/mp4" />
-                你的瀏覽器不支援影片播放。
-              </video>
+            <article class="lesson-video-section">
+              <div class="video-panel">
+                <iframe
+                  id="learningVideoFrame"
+                  width="100%"
+                  height="360"
+                  src=""
+                  title="數學概念影片"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen>
+                </iframe>
+              </div>
               <p class="video-source">
-                原始影片：
-                <a id="videoSourceLink" href="#" target="_blank" rel="noopener">YouTube 連結</a>
+                影片來源：YouTube / 均一教育平台
               </p>
+              <div class="video-after">
+                <img src="assets/bunny-tutor.png" alt="" />
+                <div>
+                  <strong id="videoBunnyQuestion">小兔提問：你剛剛看到的重點是什麼？</strong>
+                  <p id="videoConceptPrompt">先用一句話想想，再進練習。看不懂也沒關係，練習會有提示。</p>
+                  <button class="primary-action small" id="videoToPracticeBtn" type="button">開始練習</button>
+                </div>
+              </div>
             </article>
             <aside class="video-guide panel">
               <h2>小兔提醒</h2>
               <p id="videoLearningNote">看完影片後，先做幾題練習，再進 10 題測驗。</p>
-              <button class="secondary-action" id="openVideoExternalBtn" type="button">影片不能播放時開啟</button>
-              <button class="primary-action" id="videoToPracticeBtn" type="button">看完了，開始練習</button>
             </aside>
           </div>
         </section>
@@ -396,6 +409,10 @@
               <strong>分數除以整數</strong>
               <span>10 題檢查分數平均分。</span>
             </button>
+            <button type="button" data-quiz-concept="mixed">
+              <strong>綜合測驗</strong>
+              <span>20 題隨機檢查三個單元。</span>
+            </button>
           </div>
 
           <div class="practice-layout quiz-layout">
@@ -409,12 +426,14 @@
                 <input id="quizDenInput" inputmode="numeric" aria-label="測驗分母" />
               </div>
               <button class="primary-action" id="submitQuizAnswer" type="button">送出答案</button>
+              <button class="secondary-action is-hidden" id="nextQuizQuestionBtn" type="button">下一題</button>
               <p class="feedback" id="quizFeedback">測驗會看不同做題狀況，最後給你加強建議。</p>
               <div class="quiz-complete is-hidden" id="quizComplete">
                 <img src="assets/bunny-tutor.png" alt="" />
                 <div>
                   <strong id="quizCompleteTitle">測驗完成</strong>
                   <p id="quizCompleteText"></p>
+                  <div id="quizReviewList" class="quiz-review-list"></div>
                   <button class="primary-action small" type="button" data-view-link="records">看學習建議</button>
                 </div>
               </div>
