@@ -85,30 +85,23 @@
 
         <nav class="nav-list" aria-label="主要功能">
           <button class="nav-item active" data-view="home"><span>⌂</span>學習首頁</button>
-          <button class="nav-item" data-view="coach"><span>✦</span>學習管家</button>
           <button class="nav-item" data-view="course"><span>▦</span>課程</button>
+          <button class="nav-item" data-view="videoLearning"><span>▶</span>影片學習</button>
           <button class="nav-item" data-view="practice"><span>✎</span>練習</button>
-          <button class="nav-item" data-view="interaction"><span>◇</span>圖像操作</button>
+          <button class="nav-item" data-view="quiz"><span>✓</span>測驗</button>
           <button class="nav-item" data-view="records"><span>▥</span>紀錄</button>
+          <button class="nav-item" data-view="coach"><span>✦</span>聊聊</button>
           <button class="nav-item" data-view="data"><span>▤</span>資料</button>
-          <button class="nav-item" data-view="system"><span>⌘</span>系統</button>
         </nav>
 
-        <div class="side-status">
-          <span>本週目標</span>
-          <strong>完成 5 次有效練習</strong>
-          <div class="mini-progress"><i style="width: 60%"></i></div>
-        </div>
       </aside>
 
       <main class="main">
         <header class="topbar">
           <div>
             <strong id="welcomeText">小明，歡迎回來</strong>
-            <span>今天建議先完成 20 分鐘練習</span>
           </div>
           <div class="top-actions">
-            <div class="score-pill">★ 星星：<strong id="starCount">16</strong></div>
             <button class="secondary-action small" id="logoutBtn">登出</button>
           </div>
         </header>
@@ -117,8 +110,8 @@
           <div class="dashboard-head">
             <div>
               <p class="eyebrow">學習起點</p>
-              <h1>先選卡住的單元</h1>
-              <p>選一個單元，再說說目前遇到的狀況。</p>
+              <h1>先看今天的狀態</h1>
+              <p>先聊聊心情，再選單元和卡住的地方，我會幫你安排比較適合的學習方式。</p>
             </div>
           </div>
 
@@ -126,10 +119,15 @@
             <article class="diagnostic-chat panel">
               <div class="chat-row coach-message">
                 <img src="assets/bunny-tutor.png" alt="" />
-                <p id="diagnosticPrompt">先選一個最近覺得比較卡的單元。</p>
+                <p id="diagnosticPrompt">今天心情怎麼樣？先選一個最接近的。</p>
+              </div>
+              <div class="quick-replies mood-replies" aria-label="今天心情">
+                <button type="button" data-mood="happy">開心</button>
+                <button type="button" data-mood="normal">普通</button>
+                <button type="button" data-mood="unhappy">不開心</button>
               </div>
               <div id="diagnosticMessages" class="diagnostic-messages"></div>
-              <div class="quick-replies unit-replies" aria-label="五年級單元">
+              <div class="quick-replies unit-replies is-hidden" aria-label="五年級單元">
                 <button type="button" data-unit="fractionMultiply">分數的乘法</button>
                 <button type="button" data-unit="integerDivision">整數相除之分數表示</button>
                 <button type="button" data-unit="fractionDivideInteger">分數除以整數</button>
@@ -143,20 +141,23 @@
               <div id="diagnosticInputBlock" class="is-hidden">
                 <label class="input-label" for="diagnosticInput">也可以自己輸入</label>
                 <textarea id="diagnosticInput" rows="3" placeholder="例如：我知道要乘，可是不知道為什麼分母也要乘。"></textarea>
-                <button class="primary-action" id="sendDiagnosticBtn">送出想法</button>
+                <div class="diagnostic-actions">
+                  <button class="primary-action" id="sendDiagnosticBtn">送出想法</button>
+                  <button class="secondary-action" id="resetDiagnosticBtn" type="button">重新整理</button>
+                </div>
               </div>
             </article>
 
             <aside class="recommend-panel panel">
               <h2>下一步</h2>
               <div id="difficultyTag" class="difficulty-tag">等待你的回答</div>
-              <p id="recommendReason">先選一個單元，再選目前遇到的狀況。</p>
+              <p id="recommendReason">先選今天的心情，再選單元和目前遇到的狀況。</p>
               <div class="recommend-card">
                 <span>建議活動</span>
                 <strong id="recommendTitle">尚未產生</strong>
                 <p id="recommendDetail">完成選擇後會出現建議活動。</p>
               </div>
-              <button class="primary-action" id="startRecommendationBtn" disabled>前往推薦內容</button>
+              <button class="primary-action" id="startRecommendationBtn" disabled>開始推薦學習</button>
             </aside>
           </div>
         </section>
@@ -164,7 +165,7 @@
         <section class="view" id="coach">
           <div class="page-title">
             <div>
-              <p class="eyebrow">學習管家</p>
+              <p class="eyebrow">聊聊</p>
               <h1>聊聊目前的狀況</h1>
               <p>把卡住的地方說出來，系統會保留紀錄，方便下次接著看。</p>
             </div>
@@ -200,7 +201,6 @@
               <p class="eyebrow">課程</p>
               <h1>分數單元</h1>
             </div>
-            <div class="progress-chip">本單元 3 / 8</div>
           </div>
 
           <div class="lesson-list">
@@ -211,8 +211,11 @@
                 <h2>分數乘法的意義</h2>
                 <p>用圖像理解「一部分的一部分」，讓公式自然長出來。</p>
               </div>
-              <div class="lesson-progress"><span>60%</span><div><i style="width: 60%"></i></div></div>
-              <button class="primary-action small" data-view-link="interaction">開始操作</button>
+              <div class="lesson-actions">
+                <button class="secondary-action small" data-video-url="https://www.youtube.com/watch?v=LUgDLJKaKuk" data-video-file="videos/fraction-multiply.mp4" data-video-title="分數乘法的意義" data-video-concept="fractionMultiply">影片學習</button>
+                <button class="secondary-action small" data-practice-concept="fractionMultiply">開始練習</button>
+                <button class="primary-action small" data-quiz-concept="fractionMultiply">測驗</button>
+              </div>
             </article>
             <article class="lesson-card">
               <div class="lesson-visual blue-visual">6 ÷ 4 = <span class="frac"><span>3</span><span>2</span></span></div>
@@ -221,8 +224,11 @@
                 <h2>整數相除與分數表示</h2>
                 <p>把除法結果轉成分數，補上分子分母的語意。</p>
               </div>
-              <div class="lesson-progress"><span>40%</span><div><i style="width: 40%"></i></div></div>
-              <button class="secondary-action small">排入明日</button>
+              <div class="lesson-actions">
+                <button class="secondary-action small" data-video-url="https://www.youtube.com/watch?v=IlKS5dD2sYE&t=3s" data-video-file="videos/integer-division.mp4" data-video-title="整數相除與分數表示" data-video-concept="integerDivision">影片學習</button>
+                <button class="secondary-action small" data-practice-concept="integerDivision">開始練習</button>
+                <button class="primary-action small" data-quiz-concept="integerDivision">測驗</button>
+              </div>
             </article>
             <article class="lesson-card">
               <div class="lesson-visual purple-visual"><span class="frac"><span>3</span><span>4</span></span> ÷ 2</div>
@@ -231,10 +237,72 @@
                 <h2>分數除以整數</h2>
                 <p>從平均分配開始，避免只背顛倒相乘。</p>
               </div>
-              <div class="lesson-progress"><span>0%</span><div><i style="width: 0%"></i></div></div>
-              <button class="secondary-action small">稍後學習</button>
+              <div class="lesson-actions">
+                <button class="secondary-action small" data-video-url="https://www.youtube.com/watch?v=fF3CA2drUek" data-video-file="videos/fraction-divide-integer.mp4" data-video-title="分數除以整數" data-video-concept="fractionDivideInteger">影片學習</button>
+                <button class="secondary-action small" data-practice-concept="fractionDivideInteger">開始練習</button>
+                <button class="primary-action small" data-quiz-concept="fractionDivideInteger">測驗</button>
+              </div>
             </article>
           </div>
+        </section>
+
+        <section class="view" id="videoLearning">
+          <div class="page-title">
+            <div>
+              <p class="eyebrow">影片學習</p>
+              <h1 id="videoLearningTitle">先看一小段</h1>
+            </div>
+            <button class="secondary-action small" type="button" data-view-link="course">回課程</button>
+          </div>
+
+          <div class="mode-selector">
+            <button type="button" data-video-url="https://www.youtube.com/watch?v=LUgDLJKaKuk" data-video-file="videos/fraction-multiply.mp4" data-video-title="分數乘法的意義" data-video-concept="fractionMultiply">
+              <strong>分數的乘法</strong>
+              <span>先看「一部分的一部分」。</span>
+            </button>
+            <button type="button" data-video-url="https://www.youtube.com/watch?v=IlKS5dD2sYE&t=3s" data-video-file="videos/integer-division.mp4" data-video-title="整數相除與分數表示" data-video-concept="integerDivision">
+              <strong>整數相除與分數表示</strong>
+              <span>理解除法和分數的關係。</span>
+            </button>
+            <button type="button" data-video-url="https://www.youtube.com/watch?v=fF3CA2drUek" data-video-file="videos/fraction-divide-integer.mp4" data-video-title="分數除以整數" data-video-concept="fractionDivideInteger">
+              <strong>分數除以整數</strong>
+              <span>用平均分配理解除法。</span>
+            </button>
+          </div>
+
+          <div class="video-learning-layout">
+            <article class="video-panel">
+              <video id="learningVideo" class="local-video" controls preload="metadata">
+                <source id="learningVideoSource" src="" type="video/mp4" />
+                你的瀏覽器不支援影片播放。
+              </video>
+              <p class="video-source">
+                原始影片：
+                <a id="videoSourceLink" href="#" target="_blank" rel="noopener">YouTube 連結</a>
+              </p>
+            </article>
+            <aside class="video-guide panel">
+              <h2>小兔提醒</h2>
+              <p id="videoLearningNote">看完影片後，先做幾題練習，再進 10 題測驗。</p>
+              <button class="secondary-action" id="openVideoExternalBtn" type="button">影片不能播放時開啟</button>
+              <button class="primary-action" id="videoToPracticeBtn" type="button">看完了，開始練習</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="concept">
+          <div class="concept-top">
+            <button class="secondary-action small" type="button" data-view-link="course">回課程</button>
+            <div class="concept-progress" id="conceptProgress" aria-label="概念學習進度"></div>
+          </div>
+
+          <article class="concept-shell">
+            <div class="concept-bunny">
+              <img src="assets/bunny-tutor.png" alt="" />
+              <p id="conceptBunnyText">先一起看一小步。</p>
+            </div>
+            <div class="concept-stage" id="conceptStage"></div>
+          </article>
         </section>
 
         <section class="view" id="practice">
@@ -243,25 +311,49 @@
               <p class="eyebrow">練習</p>
               <h1>題目練習</h1>
             </div>
-            <span id="practiceStatus">本次完成：0 / 3</span>
+            <div class="practice-head-actions">
+              <button class="primary-action small" id="startQuizBtn" type="button">開始測驗</button>
+            </div>
+          </div>
+
+          <div class="mode-selector">
+            <button type="button" data-practice-concept="fractionMultiply">
+              <strong>分數的乘法</strong>
+              <span>圖像題、計算題、應用題。</span>
+            </button>
+            <button type="button" data-practice-concept="integerDivision">
+              <strong>整數相除與分數表示</strong>
+              <span>除法結果、應用題、分數連結。</span>
+            </button>
+            <button type="button" data-practice-concept="fractionDivideInteger">
+              <strong>分數除以整數</strong>
+              <span>單位分數、模型題、生活應用。</span>
+            </button>
           </div>
 
           <div class="practice-layout">
             <article class="problem-card">
               <div class="problem-number" id="problemNumber">1</div>
               <h2 id="problemText"><span class="frac"><span>2</span><span>3</span></span> × <span class="frac"><span>1</span><span>4</span></span> = ?</h2>
+              <div id="problemVisual" class="quiz-visual is-hidden"></div>
               <div class="fraction-inputs">
                 <input id="numInput" inputmode="numeric" aria-label="分子" />
                 <span></span>
                 <input id="denInput" inputmode="numeric" aria-label="分母" />
               </div>
-              <div class="confidence-row">
-                <label for="confidenceRange">把握度</label>
-                <input type="range" min="1" max="5" value="3" id="confidenceRange" />
-                <strong id="confidenceText">普通</strong>
-              </div>
               <button class="primary-action" id="submitAnswer">送出答案</button>
-              <p class="feedback" id="feedbackText">先動手算，作答後會留下概念、計算和信心線索。</p>
+              <div class="practice-response is-hidden" id="practiceResponse">
+                <img src="assets/bunny-tutor.png" alt="" />
+                <div>
+                  <strong id="practiceResponseTitle">答題結果</strong>
+                  <p id="practiceResponseText"></p>
+                  <div class="practice-response-actions">
+                    <button class="primary-action small" id="nextProblemBtn" type="button">下一題</button>
+                    <button class="secondary-action small" id="stayProblemBtn" type="button">先留在這題</button>
+                  </div>
+                </div>
+              </div>
+              <p class="feedback" id="feedbackText">先動手算，送出後會看答案。</p>
             </article>
 
             <aside class="hint-stack">
@@ -275,40 +367,58 @@
               </section>
               <section class="warm">
                 <h2>本題檢查</h2>
-                <label><input type="checkbox" checked /> 我能用圖解釋</label>
-                <label><input type="checkbox" /> 我有檢查是否能約分</label>
+                <label><input type="checkbox" id="checkConcept" /> <span id="checkConceptText">我能說出題目在問什麼</span></label>
+                <label><input type="checkbox" id="checkSimplify" /> <span id="checkSimplifyText">我有檢查是否能約分</span></label>
               </section>
             </aside>
           </div>
         </section>
 
-        <section class="view" id="interaction">
-          <div class="page-title">
+        <section class="view" id="quiz">
+          <div class="practice-head">
             <div>
-              <p class="eyebrow">圖像操作</p>
-              <h1>分數面積模型</h1>
+              <p class="eyebrow">測驗</p>
+              <h1>10 題小測驗</h1>
             </div>
-            <div class="progress-chip">活動：分數面積模型</div>
+            <span id="quizStatus">第 1 / 10 題</span>
           </div>
 
-          <div class="dive-layout">
-            <article class="dive-board">
-              <div class="area-model" aria-label="分數面積模型">
-                <div class="cell fill-a"></div><div class="cell fill-a"></div><div class="cell"></div>
-                <div class="cell answer"></div><div class="cell"></div><div class="cell"></div>
-                <div class="cell answer"></div><div class="cell"></div><div class="cell"></div>
-                <div class="cell answer"></div><div class="cell"></div><div class="cell"></div>
+          <div class="mode-selector">
+            <button type="button" data-quiz-concept="fractionMultiply">
+              <strong>分數的乘法</strong>
+              <span>10 題檢查乘法概念。</span>
+            </button>
+            <button type="button" data-quiz-concept="integerDivision">
+              <strong>整數相除與分數表示</strong>
+              <span>10 題檢查除法與分數。</span>
+            </button>
+            <button type="button" data-quiz-concept="fractionDivideInteger">
+              <strong>分數除以整數</strong>
+              <span>10 題檢查分數平均分。</span>
+            </button>
+          </div>
+
+          <div class="practice-layout quiz-layout">
+            <article class="problem-card">
+              <div class="problem-number" id="quizNumber">1</div>
+              <h2 id="quizText"></h2>
+              <div id="quizVisual" class="quiz-visual is-hidden"></div>
+              <div class="fraction-inputs">
+                <input id="quizNumInput" inputmode="numeric" aria-label="測驗分子" />
+                <span></span>
+                <input id="quizDenInput" inputmode="numeric" aria-label="測驗分母" />
               </div>
-              <div class="formula-line"><span class="frac"><span>2</span><span>3</span></span> × <span class="frac"><span>1</span><span>4</span></span> = <strong><span class="frac"><span>1</span><span>6</span></span></strong></div>
-              <p>綠色先表示 <span class="frac small-frac"><span>2</span><span>3</span></span>，藍色切成 4 份後，重疊區就是答案。</p>
+              <button class="primary-action" id="submitQuizAnswer" type="button">送出答案</button>
+              <p class="feedback" id="quizFeedback">測驗會看不同做題狀況，最後給你加強建議。</p>
+              <div class="quiz-complete is-hidden" id="quizComplete">
+                <img src="assets/bunny-tutor.png" alt="" />
+                <div>
+                  <strong id="quizCompleteTitle">測驗完成</strong>
+                  <p id="quizCompleteText"></p>
+                  <button class="primary-action small" type="button" data-view-link="records">看學習建議</button>
+                </div>
+              </div>
             </article>
-            <aside class="control-panel">
-              <h2>活動設定</h2>
-              <label>切割份數 <input type="number" min="2" max="12" value="4" /></label>
-              <label>學習關卡 <select><option>圖像理解</option><option>符號轉換</option><option>混合練習</option></select></label>
-              <button class="primary-action">記錄這次操作</button>
-              <div class="api-note">已記錄：拖拉、切割、重試、停留時間。</div>
-            </aside>
           </div>
         </section>
 
@@ -318,27 +428,21 @@
               <p class="eyebrow">紀錄</p>
               <h1>學習紀錄</h1>
             </div>
-            <button class="secondary-action" id="resetRecords">清除本機紀錄</button>
+            <button class="secondary-action" id="resetRecords">清除所有紀錄</button>
           </div>
 
           <div class="record-grid">
             <article class="record-card">
-              <h2>卡點分布</h2>
-              <div class="bar-row"><span>概念卡住</span><i style="width: 46%"></i><b>46%</b></div>
-              <div class="bar-row"><span>計算失誤</span><i style="width: 28%"></i><b>28%</b></div>
-              <div class="bar-row"><span>信心不足</span><i style="width: 26%"></i><b>26%</b></div>
+              <h2>學習狀況</h2>
+              <div id="recordSummary" class="record-list"></div>
             </article>
             <article class="record-card">
               <h2>今日紀錄</h2>
               <div id="recordList" class="record-list"></div>
             </article>
             <article class="record-card">
-              <h2>下一步排程</h2>
-              <ol>
-                <li>先做 1 題圖像題，確認分數乘法意義。</li>
-                <li>再做 2 題純計算，觀察是否仍需提示。</li>
-                <li>明天暖身題放入錯題相似題。</li>
-              </ol>
+              <h2>下一步建議</h2>
+              <div id="nextSuggestion" class="record-list"></div>
             </article>
           </div>
         </section>
@@ -364,31 +468,6 @@
           </div>
         </section>
 
-        <section class="view" id="system">
-          <div class="page-title">
-            <div>
-              <p class="eyebrow">系統</p>
-              <h1>系統架構</h1>
-            </div>
-          </div>
-
-          <div class="system-map">
-            <div class="map-node scene">學習情境<br /><span>PC / 平板 / 手機</span></div>
-            <div class="map-node core">兔然會了<br /><span>課程、題目、互動、測驗</span></div>
-            <div class="map-column">
-              <div class="map-node api">專題工具模組</div>
-              <div class="map-node api">Web 系統模組</div>
-              <div class="map-node api">學習輔助模組</div>
-              <div class="map-node api">其他系統模組</div>
-            </div>
-          </div>
-
-          <div class="rubric">
-            <article><b>基本操作</b><span>所有活動有呈現、有操作、有儲存。</span></article>
-            <article><b>學習控制</b><span>學習關卡、卡點、資源使用都有紀錄。</span></article>
-            <article><b>進階應用</b><span>整合伴讀情境與個人化路線，讓學習更自然。</span></article>
-          </div>
-        </section>
       </main>
     </div>
 
